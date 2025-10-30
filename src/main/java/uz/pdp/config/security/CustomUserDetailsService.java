@@ -1,6 +1,7 @@
 package uz.pdp.config.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,10 +22,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
         AuthUser authUser = authUserDAO.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found by username '%s'".formatted(username)));
-        return new User(authUser.getUsername(),authUser.getPassword(),List.of());
 
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(authUser.getRole());
+        return new User(authUser.getUname(), authUser.getPwd(), List.of(authority));
     }
+
 }

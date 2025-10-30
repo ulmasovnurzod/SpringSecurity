@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,6 +29,8 @@ public class SecurityConfig {
                         "/auth/register",
                         "/auth/login")
                 .permitAll()
+                .requestMatchers("/admin").hasRole("ADMIN")
+                .requestMatchers("/user").hasAnyRole("USER","ADMIN")
                 .anyRequest()
                 .authenticated();
 
@@ -36,7 +39,7 @@ public class SecurityConfig {
                 .loginProcessingUrl("/auth/login")
                 .usernameParameter("uname")
                 .passwordParameter("pwd")
-                .defaultSuccessUrl("/home", false)
+                .defaultSuccessUrl("/", true)
                 .permitAll();
 
         http.logout()
@@ -50,7 +53,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
 //    @Bean

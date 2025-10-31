@@ -50,7 +50,6 @@ public class AuthController {
         AuthUser authUser = AuthUser.builder()
                 .uname(dto.username())
                 .pwd(encoder.encode(dto.password()))
-                .role("ROLE_USER") // qo‘shish shart
                 .build();
          authUserDAO.save(authUser);
         return "redirect:/auth/login";

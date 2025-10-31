@@ -25,9 +25,7 @@ public class AuthUserDAO {
 
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("uname", authUser.getUname())
-                .addValue("pwd", authUser.getPwd())
-                .addValue("role", authUser.getRole());
-
+                .addValue("pwd", authUser.getPwd());
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(sql, map, keyHolder, new String[]{"id"});
         return (Long) keyHolder.getKeys().get("id");
